@@ -1,0 +1,47 @@
+version: '3.3'
+services:
+  postgres:
+    container_name: payService_postgres
+    image: postgres:${POSTGRES_VERSION:-15}-alpine
+    ports:
+      - "54322:5432"
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: db_dev
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - postgres-data:/var/lib/postgresql/data:cached
+
+  nginx:
+    container_name: payService_nginx
+    image: nginx:latest
+    ports:
+      - "8090:80"
+    volumes:
+      - ./:/var/www:delegated
+      - ./docker/dev/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - app
+
+  app:
+    container_name: payService_fpm
+    build:
+      context: ./docker/dev/app
+    volumes:
+      - ./:/var/www:delegated
+    depends_on:
+      - postgres
+
+  cli:
+    container_name: payService_cli
+    build:
+      context: ./docker/dev/cli
+    volumes:
+      - ./:/var/www:delegated
+    depends_on:
+      - postgres
+    user: app
+
+volumes:
+  postgres-data:
