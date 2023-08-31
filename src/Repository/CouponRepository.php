@@ -45,4 +45,23 @@ class CouponRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+
+//    public function findOneBySomeField($value): ?Coupon
+//    {
+//        return $this->createQueryBuilder('c')
+//            ->andWhere('c.exampleField = :val')
+//            ->setParameter('val', $value)
+//            ->getQuery()
+//            ->getOneOrNullResult()
+//        ;
+//    }
+
+    public function findByCode(string $couponCode): ?Coupon
+    {
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.code = :code')
+            ->setParameter('code', $couponCode)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 }

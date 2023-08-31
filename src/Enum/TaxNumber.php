@@ -29,7 +29,7 @@ enum TaxNumber
         };
     }
 
-    public function getTaxByTaxNumber(string $taxNumber): ?int
+    public static function getTaxByTaxNumber(string $taxNumber): ?int
     {
         foreach (self::cases() as $case) {
             if (preg_match($case->getTaxNumber(), $taxNumber)) {
