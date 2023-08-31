@@ -9,10 +9,11 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use OpenApi\Attributes as OA;
 
-
+#[Route('/api')]
+#[OA\Tag(name: 'payService api')]
 final class PayController extends AbstractController
 {
-    #[Route('/api/pay/calculate', methods: ['GET', 'POST'])]
+    #[Route('/calculate', methods: ['GET', 'POST'])] // TODO only POST
     #[OA\Response(
         response: 200,
         description: 'Accepted',
@@ -23,6 +24,6 @@ final class PayController extends AbstractController
     )]
     public function calculate(): JsonResponse
     {
-        return new JsonResponse(['result' => 'ok']);
+        return $this->json(['result' => 'ok']);
     }
 }
