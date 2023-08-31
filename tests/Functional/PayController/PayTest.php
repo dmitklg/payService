@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional\PayController;
 
+use App\Enum\PaymentProcessor;
 use Generator;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
@@ -21,7 +22,7 @@ final class PayTest extends WebTestCase
             'product' => 1,
             'taxNumber' => $taxNumber,
             'couponCode' => 'P06',
-            'paymentProcessor' => 'paypal',
+            'paymentProcessor' => PaymentProcessor::PAYPAL->value,
         ]);
         $response = $client->getResponse();
 
@@ -45,7 +46,7 @@ final class PayTest extends WebTestCase
             'product' => 1,
             'taxNumber' => $taxNumber,
             'couponCode' => 'P06',
-            'paymentProcessor' => 'paypal',
+            'paymentProcessor' => PaymentProcessor::PAYPAL->value,
         ]);
         $response = $client->getResponse();
 
@@ -104,7 +105,7 @@ final class PayTest extends WebTestCase
             'product' => 100,
             'taxNumber' => 'DE123456789',
             'couponCode' => 'P06',
-            'paymentProcessor' => 'paypal',
+            'paymentProcessor' => PaymentProcessor::PAYPAL->value,
         ]);
         $response = $client->getResponse();
 
@@ -131,7 +132,7 @@ final class PayTest extends WebTestCase
             'product' => 1,
             'taxNumber' => 'DE123456789',
             'couponCode' => 'P22',
-            'paymentProcessor' => 'paypal',
+            'paymentProcessor' => PaymentProcessor::PAYPAL->value,
         ]);
         $response = $client->getResponse();
 
@@ -158,7 +159,7 @@ final class PayTest extends WebTestCase
             'product' => 1,
             'taxNumber' => 'DE123456789',
             'couponCode' => 'F110',
-            'paymentProcessor' => 'paypal',
+            'paymentProcessor' => PaymentProcessor::PAYPAL->value,
         ]);
         $response = $client->getResponse();
 

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional\Service;
 
+use App\Enum\PaymentProcessor;
 use App\Service\PaymentService;
 use Exception;
 use Generator;
@@ -19,7 +20,7 @@ final class PayServiceTest extends WebTestCase
         $service = $this->getService();
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Too high price');
-        $service->pay('paypal', 100001);
+        $service->pay(PaymentProcessor::PAYPAL->value, 100001);
     }
 
     public function testTooLowPrice()
@@ -30,7 +31,7 @@ final class PayServiceTest extends WebTestCase
         $service = $this->getService();
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Too low price');
-        $service->pay('stripe', 9);
+        $service->pay(PaymentProcessor::STRIPE->value, 9);
     }
 
     public function getService()
