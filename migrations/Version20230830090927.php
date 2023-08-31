@@ -24,6 +24,7 @@ final class Version20230830090927 extends AbstractMigration
         $this->addSql('CREATE TABLE coupon (id INT NOT NULL, code VARCHAR(255) NOT NULL, type VARCHAR(255) NOT NULL, discount DOUBLE PRECISION NOT NULL, PRIMARY KEY(id))');
         $this->addSql("INSERT INTO coupon (id, code, type, discount) VALUES ((SELECT nextval('coupon_id_seq')), 'F05', 'fixed', 5)");
         $this->addSql("INSERT INTO coupon (id, code, type, discount) VALUES ((SELECT nextval('coupon_id_seq')), 'P06', 'procent', 6)");
+        $this->addSql("INSERT INTO coupon (id, code, type, discount) VALUES ((SELECT nextval('coupon_id_seq')), 'F110', 'fixed', 110)");
     }
 
     public function down(Schema $schema): void

@@ -32,4 +32,19 @@ class Coupon
     {
         return $this->discount;
     }
+
+    public function setCode(?string $code): void
+    {
+        $this->code = $code;
+    }
+
+    public function setType(?CouponType $type): void
+    {
+        $this->type = $type;
+    }
+
+    public function setDiscount(?float $discount): void
+    {
+        $this->discount = $discount;
+    }
 }

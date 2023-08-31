@@ -7,6 +7,9 @@ init: docker-init app-init
 docker-init: docker-erase docker-pull docker-build docker-up
 app-init: permissions composer-install migration cache-clear
 
+test: test-init test-all
+test-init: permissions cache-clear-test db-create-test migration-test
+
 docker-up:
 	docker-compose up -d
 
@@ -54,3 +57,18 @@ composer-install:
 
 migration:
 	docker-compose run --rm cli php bin/console doctrine:migrations:migrate --no-interaction
+
+# TESTS
+
+db-create-test:
+	docker-compose run --rm --no-deps cli php bin/console doctrine:database:create --if-not-exists --no-interaction --env=test
+
+schema-create-test:
+	docker-compose run --rm --no-deps cli php bin/console doctrine:schema:create --no-interaction --env=test
+
+migration-test:
+	docker-compose run --rm --no-deps cli php bin/console doctrine:migrations:migrate --no-interaction --env=test
+cache-clear-test:
+	docker-compose run --rm --no-deps cli php bin/console cache:clear --env=test
+test-all:
+	docker-compose run --rm --no-deps cli php bin/phpunit --verbose

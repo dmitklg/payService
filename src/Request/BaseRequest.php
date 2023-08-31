@@ -4,15 +4,17 @@ declare(strict_types=1);
 
 namespace App\Request;
 
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 abstract class BaseRequest
 {
-    public function __construct(protected ValidatorInterface $validator)
-    {
+    public function __construct(
+        private readonly ValidatorInterface $validator,
+        private readonly RequestStack $requestStack,
+    ) {
         $this->populate();
     }
 
@@ -40,7 +42,7 @@ abstract class BaseRequest
 
     public function getRequest(): Request
     {
-        return Request::createFromGlobals();
+        return $this->requestStack->getMainRequest();
     }
 
     protected function populate(): void

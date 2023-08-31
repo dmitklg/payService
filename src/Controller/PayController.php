@@ -47,13 +47,21 @@ final class PayController extends AbstractController
             return $this->json($messages, 400);
         }
 
-        return $this->json([
-            'price' => $calculateService->calculate(
+        try {
+            $price = $calculateService->calculate(
                 $request->getProductId(),
                 $request->getTaxNumber(),
                 $request->getCouponCode(),
-            ),
-        ]);
+            );
+            return $this->json([
+                'price' => $price,
+            ]);
+        } catch (Throwable $e) {
+            return $this->json([
+                'message' =>'calculate error',
+                'error' => $e->getMessage(),
+            ],  400);
+        }
     }
 
     /**
@@ -91,19 +99,26 @@ final class PayController extends AbstractController
         if ($messages = $request->validate()) {
             return $this->json($messages, 400);
         }
+        try {
+            $price = $calculateService->calculate(
+                $request->getProductId(),
+                $request->getTaxNumber(),
+                $request->getCouponCode(),
+            );
+        } catch (Throwable $e) {
+            return $this->json([
+                'message' =>'calculate error',
+                'error' => $e->getMessage(),
+            ],  400);
+        }
 
-        $price = $calculateService->calculate(
-            $request->getProductId(),
-            $request->getTaxNumber(),
-            $request->getCouponCode(),
-        );
         try {
             $price = $payment->pay($request->getPaymentProcessor(), $price);
         } catch (Throwable $e) {
             return $this->json([
-                'message' =>'error payment',
+                'message' =>'payment error',
                 'error' => $e->getMessage(),
-            ],  500);
+            ],  400);
         }
 
         return $this->json([

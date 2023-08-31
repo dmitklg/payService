@@ -8,6 +8,7 @@ use App\Enum\CouponType;
 use App\Enum\TaxNumber;
 use App\Repository\CouponRepository;
 use App\Repository\ProductRepository;
+use PHPUnit\Util\Exception;
 
 final class CalculateService
 {
@@ -31,6 +32,10 @@ final class CalculateService
                 CouponType::FIXED => $price - $coupon->getDiscount(),
                 CouponType::PROCENT => $price * ((100 - $coupon->getDiscount()) / 100),
             };
+
+            if ($price <= 0) {
+                throw New Exception('Very high discount');
+            }
         }
 
         $price += $price * $tax / 100;

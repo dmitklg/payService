@@ -9,5 +9,5 @@ use Symfony\Component\Validator\Constraint;
 #[\Attribute]
 final class ConstraintTaxNumber extends Constraint
 {
-    public string $message = 'Invalid Tax Number';
+    public string $message = 'Invalid Tax Number.';
 }
