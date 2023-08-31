@@ -33,6 +33,28 @@ final class CalculateTest extends WebTestCase
     }
 
     /**
+     * @dataProvider taxNumberFixedCouponDataProvider
+     */
+    public function testSuccessWithFixedCoupon(string $taxNumber, float $price)
+    {
+        $client = CalculateTest::createClient();
+        $client->jsonRequest('POST', self::URL, [
+            'product' => 1,
+            'taxNumber' => $taxNumber,
+            'couponCode' => 'F05',
+        ]);
+        $response = $client->getResponse();
+
+        $this->assertResponseStatusCodeSame(200);
+        $this->assertJsonStringEqualsJsonString(
+            json_encode([
+                'price' => $price,
+            ]),
+            $response->getContent()
+        );
+    }
+
+    /**
      * @dataProvider invalidTaxNumberDataProvider
      */
     public function testInvalidTaxNumber(string $taxNumber)
@@ -174,5 +196,13 @@ final class CalculateTest extends WebTestCase
         yield ['IT123456789011'];
         yield ['GR1234567891'];
         yield ['FRAB1234567891'];
+    }
+
+    public function taxNumberFixedCouponDataProvider()
+    {
+        yield ['DE123456789', 113.05];
+        yield ['IT12345678901', 115.9];
+        yield ['GR123456789', 117.8];
+        yield ['FRAB123456789', 114];
     }
 }
