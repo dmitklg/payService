@@ -19,18 +19,18 @@ final class CalculateRequest extends BaseRequest
     #[Type('string')]
     #[NotBlank]
     #[ConstraintTaxNumber]
-    protected ?string $taxNumber;
+    protected string $taxNumber;
 
     #[Type('string')]
     #[EntityExist(entity: 'App\Entity\Coupon', property: 'code')]
-    protected ?string $couponCode;
+    protected ?string $couponCode = null;
 
     public function getProductId(): int
     {
         return $this->product;
     }
 
-    public function getTaxNumber(): ?string
+    public function getTaxNumber(): string
     {
         return $this->taxNumber;
     }

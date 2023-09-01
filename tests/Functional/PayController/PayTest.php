@@ -37,6 +37,29 @@ final class PayTest extends WebTestCase
     }
 
     /**
+     * @dataProvider taxNumberWithoutCouponDataProvider
+     */
+    public function testSuccessWithoutCoupon(string $taxNumber, float $price)
+    {
+        $client = PayTest::createClient();
+        $client->jsonRequest('POST', self::URL, [
+            'product' => 1,
+            'taxNumber' => $taxNumber,
+            'paymentProcessor' => PaymentProcessor::PAYPAL->value,
+        ]);
+        $response = $client->getResponse();
+
+        $this->assertResponseStatusCodeSame(200);
+        $this->assertJsonStringEqualsJsonString(
+            json_encode([
+                'price' => $price,
+                'message' => 'payment successful',
+            ]),
+            $response->getContent()
+        );
+    }
+
+    /**
      * @dataProvider invalidTaxNumberDataProvider
      */
     public function testInvalidTaxNumber(string $taxNumber)
@@ -225,6 +248,14 @@ final class PayTest extends WebTestCase
         yield ['IT12345678901', 114];
         yield ['GR123456789', 116];
         yield ['FRAB123456789', 112];
+    }
+
+    public function taxNumberWithoutCouponDataProvider(): Generator
+    {
+        yield ['DE123456789', 119];
+        yield ['IT12345678901', 122];
+        yield ['GR123456789', 124];
+        yield ['FRAB123456789', 120];
     }
 
     public function invalidTaxNumberDataProvider(): Generator

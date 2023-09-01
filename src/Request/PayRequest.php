@@ -21,16 +21,16 @@ final class PayRequest extends BaseRequest
     #[Type('string')]
     #[NotBlank]
     #[ConstraintTaxNumber]
-    protected ?string $taxNumber;
+    protected string $taxNumber;
 
     #[Type('string')]
     #[EntityExist(entity: 'App\Entity\Coupon', property: 'code')]
-    protected ?string $couponCode;
+    protected ?string $couponCode = null;
 
     #[Type('string')]
     #[NotBlank]
     #[Choice(callback: 'getPaymentProcessors')]
-    protected ?string $paymentProcessor;
+    protected string $paymentProcessor;
 
 
     public function getProductId(): int
@@ -38,7 +38,7 @@ final class PayRequest extends BaseRequest
         return $this->product;
     }
 
-    public function getTaxNumber(): ?string
+    public function getTaxNumber(): string
     {
         return $this->taxNumber;
     }
@@ -48,7 +48,7 @@ final class PayRequest extends BaseRequest
         return $this->couponCode;
     }
 
-    public function getPaymentProcessor(): ?string
+    public function getPaymentProcessor(): string
     {
         return $this->paymentProcessor;
     }
